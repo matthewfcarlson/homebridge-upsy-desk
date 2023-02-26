@@ -140,9 +140,6 @@ export class UpsyDeskAccessory {
     }
     const state = await this.handlePositionStateGet();
     this.service.updateCharacteristic(this.platform.Characteristic.PositionState, state);
-    this.platform.log.debug('Characteristics', current, target, state);
-    // eslint-disable-next-line max-len
-    this.platform.log.debug('internals', this.internalState.Connected, this.internalState.CurrentHeight, this.internalState.TargetHeight, this.internalState.MaxHeight, this.internalState.MinHeight);
   }
 
   private addPresetButton(number: string | number) {
@@ -163,7 +160,6 @@ export class UpsyDeskAccessory {
       // This is an error state
       return -1;
     }
-    this.platform.log.debug('calculatePosition', CurrentHeight);
     if (CurrentHeight < this.internalState.MinHeight) {
       return 0;
     }
@@ -184,7 +180,7 @@ export class UpsyDeskAccessory {
 
   async handleCurrentPositionGet(): Promise<CharacteristicValue> {
     const height = this.calculateCurrentPosition();
-    this.platform.log.debug('Get Position ->', height);
+    this.platform.log.info('Get Position ->', height);
     if (height < 0) {
       // if you need to return an error to show the device as "Not Responding" in the Home app:
       throw new this.platform.api.hap.HapStatusError(this.platform.api.hap.HAPStatus.SERVICE_COMMUNICATION_FAILURE);
@@ -208,7 +204,7 @@ export class UpsyDeskAccessory {
    */
   async handleTargetPositionSet(value: CharacteristicValue) {
     // implement your own code to turn your device on/off
-    this.platform.log.debug('Set TargetPosition ->', value);
+    this.platform.log.info('Set TargetPosition ->', value);
     // TODO: make the request and let the mechanism work it's magic
   }
 
@@ -229,7 +225,7 @@ export class UpsyDeskAccessory {
     // implement your own code to check if the device is on
     const height = this.calculateTargetPosition();
 
-    this.platform.log.debug('Get TargetPosition On ->', height);
+    this.platform.log.info('Get TargetPosition On ->', height);
 
     if (height < 0) {
       // if you need to return an error to show the device as "Not Responding" in the Home app:
@@ -239,11 +235,12 @@ export class UpsyDeskAccessory {
   }
 
   async handlePresetButtonSet(preset: number | string, value: CharacteristicValue) {
-    this.platform.log.debug('Preset pressed ->', value, preset);
+    this.platform.log.info('Preset pressed ->', value, preset);
   }
 
   async handlePresetButtonGet(preset: number | string): Promise<CharacteristicValue> {
-    this.platform.log.debug('Preset get ->', preset);
+    this.platform.log.info('Preset get ->', preset);
+    // we don't actually know what the presets are, so we just return 0
     return 0;
   }
 
