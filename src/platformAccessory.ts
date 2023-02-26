@@ -1,7 +1,7 @@
 import EventSource from 'eventsource';
 import { Service, PlatformAccessory, CharacteristicValue } from 'homebridge';
 import { UpsyDeskPlatform } from './platform';
-import http from 'http';
+// import http from 'http';
 // eslint-disable-next-line max-len
 import { UpsyDeskDeviceAccessoryContext, UpsyDeskStatePacketButtonZ, UpsyDeskStatePacketNumberZ, UpsyDeskStatePacketSelectZ, UpsyDeskStatePacketSensorZ } from './upsy_types';
 
