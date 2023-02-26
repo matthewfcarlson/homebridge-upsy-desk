@@ -1,7 +1,7 @@
 {
   "displayName": "Upsy Desk Homebridge",
   "name": "homebridge-upsy-desk",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Connects your upsy desk to homekit via homebridge",
   "license": "Apache-2.0",
   "repository": {
