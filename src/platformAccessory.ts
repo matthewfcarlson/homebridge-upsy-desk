@@ -204,12 +204,12 @@ export class UpsyDeskAccessory {
   }
 
   async handlePositionStateGet(): Promise<CharacteristicValue> {
-    if (this.internalState.CurrentHeight < this.internalState.TargetHeight) {
-      return this.platform.Characteristic.PositionState.INCREASING;
-    }
-    if (this.internalState.CurrentHeight > this.internalState.TargetHeight) {
-      return this.platform.Characteristic.PositionState.DECREASING;
-    }
+    // if (this.internalState.CurrentHeight < this.internalState.TargetHeight) {
+    //   return this.platform.Characteristic.PositionState.INCREASING;
+    // }
+    // if (this.internalState.CurrentHeight > this.internalState.TargetHeight) {
+    //   return this.platform.Characteristic.PositionState.DECREASING;
+    // }
     return this.platform.Characteristic.PositionState.STOPPED;
   }
 
