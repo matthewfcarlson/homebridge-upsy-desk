@@ -27,10 +27,10 @@ export class UpsyDeskAccessory {
   };
 
   private es: EventSource;
-  private button1: Service;
-  private button2: Service;
-  private button3: Service;
-  private button4: Service;
+  private button1: Service|null = null;
+  private button2: Service|null = null;
+  private button3: Service|null = null;
+  private button4: Service|null = null;
 
   constructor(
     private readonly platform: UpsyDeskPlatform,
@@ -38,6 +38,10 @@ export class UpsyDeskAccessory {
   ) {
 
     this.es = new EventSource(this.accessory.context.eventsUrl);
+
+    if (this.accessory.context.presets === undefined) {
+      this.accessory.context.presets = 4;
+    }
 
     // set accessory information
     this.accessory.getService(this.platform.Service.AccessoryInformation)!
@@ -77,10 +81,18 @@ export class UpsyDeskAccessory {
      */
 
     // Example: add two "motion sensor" services to the accessory
-    this.button1 = this.addPresetButton(1);
-    this.button2 = this.addPresetButton(2);
-    this.button3 = this.addPresetButton(3);
-    this.button4 = this.addPresetButton(4);
+    if (this.accessory.context.presets >= 1) {
+      this.button1 = this.addPresetButton(1);
+    }
+    if (this.accessory.context.presets >= 2) {
+      this.button2 = this.addPresetButton(2);
+    }
+    if (this.accessory.context.presets >= 3) {
+      this.button3 = this.addPresetButton(3);
+    }
+    if (this.accessory.context.presets >= 4) {
+      this.button4 = this.addPresetButton(4);
+    }
 
     this.es.addEventListener('state', (e) => {
       const raw_data = JSON.parse(e.data);
@@ -260,16 +272,16 @@ export class UpsyDeskAccessory {
 
     }, (res) => {
       this.platform.log.info('Preset pressed ->', res);
-      if (preset === '1' || preset === 1) {
+      if (this.button1 !== null && (preset === '1' || preset === 1)) {
         this.button1.updateCharacteristic(this.platform.Characteristic.On, 0);
       }
-      if (preset === '2' || preset === 2) {
+      if (this.button2 !== null && (preset === '2' || preset === 2)) {
         this.button2.updateCharacteristic(this.platform.Characteristic.On, 0);
       }
-      if (preset === '3' || preset === 3) {
+      if (this.button3 !== null && (preset === '3' || preset === 3)) {
         this.button3.updateCharacteristic(this.platform.Characteristic.On, 0);
       }
-      if (preset === '4' || preset === 4) {
+      if (this.button4 !== null && (preset === '4' || preset === 4)) {
         this.button4.updateCharacteristic(this.platform.Characteristic.On, 0);
       }
     });

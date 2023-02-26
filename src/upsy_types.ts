@@ -14,6 +14,7 @@ export const UpsyDeskDeviceAccessoryContextZ = z.object({
   host: z.string(),
   eventsUrl: z.string().url(),
   uniqueID:z.string(),
+  presets:z.number().optional(),
 }).passthrough();
 export type UpsyDeskDeviceAccessoryContext = z.infer<typeof UpsyDeskDeviceAccessoryContextZ>;
 

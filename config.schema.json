@@ -19,7 +19,12 @@
                           "name": "Display Name",
                           "type": "string",
                           "required": false
-                      }
+                      },
+                      "presets": {
+                        "name": "Number of Presets to show",
+                        "type": "number",
+                        "required": false
+                    }
                   }
               }
           },
@@ -42,6 +47,7 @@
                   "items": [
                       "devices[].host",
                       "devices[].display_name",
+                      "devices[].presets"
                   ]
               }
           ]

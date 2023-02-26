@@ -10,6 +10,7 @@ interface UpsyDeskDeviceConfig {
   host: string;
   display_name?: string;
   retryAfter?: number;
+  presets?:number;
 }
 
 interface UpsyDeskPlatformConfig extends PlatformConfig {
@@ -99,6 +100,7 @@ export class UpsyDeskPlatform implements DynamicPlatformPlugin {
             host: x.host,
             eventsUrl:host,
             uniqueID: data.title,
+            presets: x.presets,
           };
           const existingAccessory = this.accessories.find(accessory => accessory.UUID === uuid);
           if (existingAccessory) {
