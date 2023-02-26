@@ -173,6 +173,7 @@ export class UpsyDeskAccessory {
     const name = `Upsy Desky Preset ${number}`;
     const id = `${this.accessory.context.uniqueID}-${number}`;
     const service = this.accessory.getService(name) || this.accessory.addService(this.platform.Service.Switch, name, id);
+    service.setCharacteristic(this.platform.Characteristic.Name, `Preset ${number}`);
     service.getCharacteristic(this.platform.Characteristic.On)
       .onGet(this.handlePresetButtonGet.bind(this, number))
       .onSet(this.handlePresetButtonSet.bind(this, number));
