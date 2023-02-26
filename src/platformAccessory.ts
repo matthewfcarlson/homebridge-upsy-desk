@@ -1,8 +1,8 @@
 import EventSource from 'eventsource';
 import { Service, PlatformAccessory, CharacteristicValue } from 'homebridge';
-
 import { UpsyDeskPlatform } from './platform';
-import { UpsyDeskDeviceAccessoryContext, UpsyDeskStatePacketNumberZ, UpsyDeskStatePacketSensorZ } from './upsy_types';
+import http from 'http';
+import { UpsyDeskDeviceAccessoryContext, UpsyDeskStatePacketButtonZ, UpsyDeskStatePacketNumberZ, UpsyDeskStatePacketSelectZ, UpsyDeskStatePacketSensorZ } from './upsy_types';
 
 /**
  * Platform Accessory
@@ -26,6 +26,10 @@ export class UpsyDeskAccessory {
   };
 
   private es: EventSource;
+  private button1: Service;
+  private button2: Service;
+  private button3: Service;
+  private button4: Service;
 
   constructor(
     private readonly platform: UpsyDeskPlatform,
@@ -72,10 +76,10 @@ export class UpsyDeskAccessory {
      */
 
     // Example: add two "motion sensor" services to the accessory
-    this.addPresetButton(1);
-    this.addPresetButton(2);
-    this.addPresetButton(3);
-    this.addPresetButton(4);
+    this.button1 = this.addPresetButton(1);
+    this.button2 = this.addPresetButton(2);
+    this.button3 = this.addPresetButton(3);
+    this.button4 = this.addPresetButton(4);
 
     this.es.addEventListener('state', (e) => {
       const raw_data = JSON.parse(e.data);
@@ -113,6 +117,16 @@ export class UpsyDeskAccessory {
         } else {
           this.platform.log.warn('Unhandled Number: ', data);
         }
+        return;
+      }
+      const button_raw = UpsyDeskStatePacketButtonZ.safeParse(raw_data);
+      if (button_raw.success) {
+        // we currently ignore buttons
+        return;
+      }
+      const select_raw = UpsyDeskStatePacketSelectZ.safeParse(raw_data);
+      if (select_raw.success) {
+        // we currently ignore select
         return;
       }
       this.platform.log.warn('Unknown state packet', raw_data);
@@ -235,7 +249,30 @@ export class UpsyDeskAccessory {
   }
 
   async handlePresetButtonSet(preset: number | string, value: CharacteristicValue) {
-    this.platform.log.info('Preset pressed ->', value, preset);
+    //http://192.168.108.221/button/upsy_desky_preset_2/press
+    const path = `/button/upsy_desky_preset_${preset}/press`;
+    this.platform.log.info('Preset pressing ->', value, preset, path);
+    http.request({
+      host: this.accessory.context.host,
+      method: 'POST',
+      path,
+
+    }, (res) => {
+      this.platform.log.info('Preset pressed ->', res);
+      if (preset === '1' || preset === 1) {
+        this.button1.updateCharacteristic(this.platform.Characteristic.On, 0);
+      }
+      if (preset === '2' || preset === 2) {
+        this.button2.updateCharacteristic(this.platform.Characteristic.On, 0);
+      }
+      if (preset === '3' || preset === 3) {
+        this.button3.updateCharacteristic(this.platform.Characteristic.On, 0);
+      }
+      if (preset === '4' || preset === 4) {
+        this.button4.updateCharacteristic(this.platform.Characteristic.On, 0);
+      }
+    });
+
   }
 
   async handlePresetButtonGet(preset: number | string): Promise<CharacteristicValue> {

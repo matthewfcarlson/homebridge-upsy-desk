@@ -28,7 +28,12 @@ export const UpsyDeskStatePacketNumberZ = z.object({
 
 export const UpsyDeskStatePacketButtonZ = z.object({
   id: z.string().startsWith('button-'),
-  name: z.string(),
+  name: z.number().optional(),
+});
+
+export const UpsyDeskStatePacketSelectZ = z.object({
+  id: z.string().startsWith('select-'),
+  name: z.number().optional(),
 });
 
 export const UpsyDeskStatePacketSensorZ = z.object({
