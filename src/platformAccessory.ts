@@ -142,7 +142,7 @@ export class UpsyDeskAccessory {
         // we currently ignore select
         return;
       }
-      this.platform.log.warn('Unknown state packet', raw_data);
+      //this.platform.log.warn('Unknown state packet', raw_data);
     });
 
     this.es.addEventListener('log', (e) => {
@@ -250,8 +250,8 @@ export class UpsyDeskAccessory {
    * this.service.updateCharacteristic(this.platform.Characteristic.On, true)
    */
   async handleTargetPositionGet(): Promise<CharacteristicValue> {
-    // implement your own code to check if the device is on
-    const height = this.calculateTargetPosition();
+    // for now always say that it's at it's target
+    const height = this.calculateCurrentPosition();
 
     this.platform.log.info('Get TargetPosition On ->', height);
 
@@ -266,26 +266,26 @@ export class UpsyDeskAccessory {
     //http://192.168.108.221/button/upsy_desky_preset_2/press
     const path = `/button/upsy_desky_preset_${preset}/press`;
     this.platform.log.info('Preset pressing ->', value, preset, path);
-    http.request({
-      host: this.accessory.context.host,
-      method: 'POST',
-      path,
+    // http.request({
+    //   host: this.accessory.context.host,
+    //   method: 'POST',
+    //   path,
 
-    }, (res) => {
-      this.platform.log.info('Preset pressed ->', res);
-      if (this.button1 !== null && (preset === '1' || preset === 1)) {
-        this.button1.updateCharacteristic(this.platform.Characteristic.On, 0);
-      }
-      if (this.button2 !== null && (preset === '2' || preset === 2)) {
-        this.button2.updateCharacteristic(this.platform.Characteristic.On, 0);
-      }
-      if (this.button3 !== null && (preset === '3' || preset === 3)) {
-        this.button3.updateCharacteristic(this.platform.Characteristic.On, 0);
-      }
-      if (this.button4 !== null && (preset === '4' || preset === 4)) {
-        this.button4.updateCharacteristic(this.platform.Characteristic.On, 0);
-      }
-    });
+    // }, (res) => {
+    //   this.platform.log.info('Preset pressed ->', res);
+    //   if (this.button1 !== null && (preset === '1' || preset === 1)) {
+    //     this.button1.updateCharacteristic(this.platform.Characteristic.On, 0);
+    //   }
+    //   if (this.button2 !== null && (preset === '2' || preset === 2)) {
+    //     this.button2.updateCharacteristic(this.platform.Characteristic.On, 0);
+    //   }
+    //   if (this.button3 !== null && (preset === '3' || preset === 3)) {
+    //     this.button3.updateCharacteristic(this.platform.Characteristic.On, 0);
+    //   }
+    //   if (this.button4 !== null && (preset === '4' || preset === 4)) {
+    //     this.button4.updateCharacteristic(this.platform.Characteristic.On, 0);
+    //   }
+    // });
 
   }
 
@@ -294,7 +294,5 @@ export class UpsyDeskAccessory {
     // we don't actually know what the presets are, so we just return 0
     return 0;
   }
-
-
 
 }
