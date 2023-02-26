@@ -1,16 +1,52 @@
 {
-  "pluginAlias": "ExampleHomebridgePlugin",
+  "pluginAlias": "upsy-desk",
   "pluginType": "platform",
   "singular": true,
   "schema": {
-    "type": "object",
-    "properties": {
-      "name": {
-        "title": "Name",
-        "type": "string",
-        "required": true,
-        "default": "Example Dynamic Platform"
+      "type": "object",
+      "properties": {
+          "devices": {
+              "title": "Devices",
+              "type": "array",
+              "items": {
+                  "type": "object",
+                  "properties": {
+                      "host": {
+                          "name": "Host",
+                          "type": "string"
+                      },
+                      "display_name": {
+                          "name": "Display Name",
+                          "type": "string",
+                          "required": false
+                      }
+                  }
+              }
+          },
+          "debug": {
+              "title": "Debug",
+              "type": "boolean",
+              "required": false
+          }
       }
-    }
-  }
+  },
+  "form": [
+      {
+          "type": "section",
+          "expandable": true,
+          "expanded": true,
+          "title": "Devices",
+          "items": [
+              {
+                  "key": "devices",
+                  "items": [
+                      "devices[].host",
+                      "devices[].display_name",
+                  ]
+              }
+          ]
+      },
+      "debug",
+      "discover"
+  ]
 }
