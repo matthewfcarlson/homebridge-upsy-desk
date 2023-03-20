@@ -208,7 +208,7 @@ export class UpsyDeskAccessory {
 
   async handleCurrentPositionGet(): Promise<CharacteristicValue> {
     const height = this.calculateCurrentPosition();
-    this.platform.log.info('Get Position ->', height);
+    this.platform.log.debug('Get Position ->', height);
     if (height < 0) {
       // if you need to return an error to show the device as "Not Responding" in the Home app:
       throw new this.platform.api.hap.HapStatusError(this.platform.api.hap.HAPStatus.SERVICE_COMMUNICATION_FAILURE);
@@ -232,7 +232,7 @@ export class UpsyDeskAccessory {
    */
   async handleTargetPositionSet(value: CharacteristicValue) {
     // implement your own code to turn your device on/off
-    this.platform.log.info('Set TargetPosition ->', value);
+    this.platform.log.debug('Set TargetPosition ->', value);
     // TODO: make the request and let the mechanism work it's magic
   }
 
@@ -253,7 +253,7 @@ export class UpsyDeskAccessory {
     // for now always say that it's at it's target
     const height = this.calculateCurrentPosition();
 
-    this.platform.log.info('Get TargetPosition On ->', height);
+    this.platform.log.debug('Get TargetPosition On ->', height);
 
     if (height < 0) {
       // if you need to return an error to show the device as "Not Responding" in the Home app:
@@ -290,7 +290,7 @@ export class UpsyDeskAccessory {
   }
 
   async handlePresetButtonGet(preset: number | string): Promise<CharacteristicValue> {
-    this.platform.log.info('Preset get ->', preset);
+    this.platform.log.debug('Preset get ->', preset);
     // we don't actually know what the presets are, so we just return 0
     return 0;
   }
